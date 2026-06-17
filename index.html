@@ -2,7 +2,9 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="HandheldFriendly" content="true">
+<meta name="MobileOptimized" content="width">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="声文字">
@@ -90,6 +92,15 @@ voiceInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.pre
 voiceInput.addEventListener('input',()=>{voiceInput.style.height='52px';voiceInput.style.height=Math.min(voiceInput.scrollHeight,120)+'px';});
 PHRASES.forEach(p=>{const btn=document.createElement('button');btn.className='pbtn';btn.textContent=p;btn.onclick=()=>{setDisplay(p);addHistory(p,'phrase');openFullscreen();};document.getElementById('phrase-scroll').appendChild(btn);});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+// デスクトップ表示モードでもモバイル幅を強制
+(function(){
+  var meta = document.querySelector('meta[name="viewport"]');
+  function forceViewport(){
+    if(meta) meta.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
+  }
+  forceViewport();
+  window.addEventListener('resize', forceViewport);
+})();
 </script>
 </body>
 </html>
