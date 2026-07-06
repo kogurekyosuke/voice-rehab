@@ -16,12 +16,12 @@
 *{box-sizing:border-box;margin:0;padding:0}html{width:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{min-height:100%;background:var(--paper);font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Yu Gothic',sans-serif;-webkit-tap-highlight-color:transparent;color:var(--ink);font-size:16px}
 button,textarea{font:inherit}button{touch-action:manipulation}
-#app{max-width:480px;width:100%;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:16px;min-height:100dvh}
+#app{max-width:480px;width:100%;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(12px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;min-height:100dvh}
 #hint{background:rgba(107,122,58,.1);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:14px;color:var(--olive);line-height:1.45;text-align:center}
-#preview{background:var(--ink);border:2px solid var(--line);border-radius:16px;padding:32px 24px;min-height:150px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;position:relative}
+#preview{background:var(--ink);border:2px solid var(--line);border-radius:16px;padding:32px 24px;min-height:220px;flex:1 1 260px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;position:relative}
 #preview-text{font-size:clamp(26px,8vw,46px);font-weight:700;color:#fff;line-height:1.5;overflow-wrap:anywhere}
 #preview-empty{font-size:15px;color:rgba(255,255,255,.5);line-height:1.6}#preview-hint{position:absolute;top:10px;right:12px;font-size:10px;color:#A4B56B;letter-spacing:.05em}
-#mic-area{display:flex;flex-direction:column;gap:8px}
+#mic-area{display:flex;flex-direction:column;gap:8px;margin-top:auto;position:sticky;bottom:0;z-index:20;background:var(--paper);padding-top:8px;box-shadow:0 -10px 18px rgba(248,245,238,.95)}
 #mic-row{display:flex;gap:10px;align-items:stretch}
 #mic-btn{flex:1;min-width:0;min-height:82px;border:2px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#E6C83E,var(--yellow));color:var(--ink);display:flex;align-items:center;justify-content:center;gap:13px;font-size:21px;font-weight:700;cursor:pointer;box-shadow:0 4px 0 rgba(107,122,58,.28);transition:transform .12s,box-shadow .12s,background .2s}
 #mic-btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(107,122,58,.28)}#mic-btn.listening{background:var(--red);color:#fff;border-color:#8F302C;box-shadow:0 4px 0 rgba(100,20,20,.25);animation:pulse 1.3s ease-in-out infinite}
@@ -41,11 +41,17 @@ button,textarea{font:inherit}button{touch-action:manipulation}
 </head>
 <body>
 <main id="app">
-  <div id="hint">マイクで話す → 内容を確認 → 送信</div>
+  <div id="hint">マイクで話す → 内容を確認 → 確定</div>
   <div id="preview" role="button" tabindex="0" aria-label="表示中の文章を全画面で開く">
     <span id="preview-empty">マイクで話すか、下の欄に入力してください</span>
     <span id="preview-text" hidden></span><span id="preview-hint" hidden>タップで全画面</span>
   </div>
+  <div id="input-label">文字入力・キーボードのマイクも使えます</div>
+  <div id="input-row">
+    <textarea id="voice-input" placeholder="ここに入力、またはキーボードの🎤を使用" rows="1" aria-label="表示する文章"></textarea>
+    <button id="send-btn" type="button" aria-label="送信して全画面表示" disabled><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D1B2A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
+  </div>
+  <section id="hist-card" aria-label="会話履歴"><div id="hist-head"><span>会話履歴</span><button id="hist-clear" type="button">全消去</button></div><div id="hist-list"><span id="hist-empty">まだ履歴がありません</span></div></section>
   <section id="mic-area" aria-label="音声入力">
     <div id="mic-row">
       <button id="mic-btn" type="button" aria-pressed="false">
@@ -56,12 +62,6 @@ button,textarea{font:inherit}button{touch-action:manipulation}
     </div>
     <p id="mic-status" role="status" aria-live="polite">タップすると音声入力を開始します</p>
   </section>
-  <div id="input-label">文字入力・キーボードのマイクも使えます</div>
-  <div id="input-row">
-    <textarea id="voice-input" placeholder="ここに入力、またはキーボードの🎤を使用" rows="1" aria-label="表示する文章"></textarea>
-    <button id="send-btn" type="button" aria-label="送信して全画面表示" disabled><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D1B2A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
-  </div>
-  <section id="hist-card" aria-label="会話履歴"><div id="hist-head"><span>会話履歴</span><button id="hist-clear" type="button">全消去</button></div><div id="hist-list"><span id="hist-empty">まだ履歴がありません</span></div></section>
 </main>
 <div id="fullscreen" role="dialog" aria-modal="true" aria-label="文章の全画面表示"><div id="fs-text"></div><div id="fs-accent"></div><div id="fs-hint">タップして戻る</div></div>
 <script>
@@ -73,14 +73,15 @@ function joinText(base,addition){return [base,addition].filter(Boolean).join(bas
 function resizeInput(){voiceInput.style.height='60px';voiceInput.style.height=Math.min(voiceInput.scrollHeight,120)+'px';}
 function updateSendState(){const empty=!voiceInput.value.trim();sendBtn.disabled=empty;confirmBtn.disabled=empty;}
 function setDisplay(text){currentText=text;previewEmpty.hidden=true;previewText.hidden=false;previewHint.hidden=false;previewText.textContent=text;}
+function resetDisplay(){currentText='';previewEmpty.hidden=false;previewText.hidden=true;previewHint.hidden=true;previewText.textContent='';}
 function updateDraft(text){voiceInput.value=text;resizeInput();updateSendState();if(text.trim())setDisplay(text.trim());}
 function addHistory(text,src){const clean=text.trim();if(!clean)return;history.unshift({text:clean,src:src,time:timeNow()});renderHistory();}
 function renderHistory(){histList.querySelectorAll('.hitem').forEach(function(element){element.remove();});histEmpty.hidden=history.length>0;history.forEach(function(item){const button=document.createElement('button'),time=document.createElement('span'),body=document.createElement('span');button.type='button';button.className='hitem';time.className='htime';body.className='hbody';time.textContent=item.time;body.textContent=(item.src==='phrase'?'◆':'◇')+' '+item.text;button.append(time,body);button.addEventListener('click',function(){setDisplay(item.text);openFullscreen();});histList.appendChild(button);});}
-function confirmText(){const text=voiceInput.value.trim();if(!text)return;if(isListening&&recognition)recognition.abort();setMicState(false,'会話履歴に追加しました。');setDisplay(text);addHistory(text,'input');voiceInput.value='';resizeInput();updateSendState();}
+function confirmText(){const text=voiceInput.value.trim();if(!text)return;if(isListening&&recognition)recognition.abort();addHistory(text,'input');voiceInput.value='';resetDisplay();resizeInput();updateSendState();setMicState(false,'会話履歴に追加しました。');}
 function submitText(){const text=voiceInput.value.trim();if(!text)return;if(isListening)stopListening();setDisplay(text);addHistory(text,'input');voiceInput.value='';resizeInput();updateSendState();openFullscreen();}
 function openFullscreen(){if(!currentText)return;fsText.textContent=currentText;fullscreen.classList.add('show');}
 function closeFullscreen(){fullscreen.classList.remove('show');}
-function clearAll(){history=[];currentText='';renderHistory();previewEmpty.hidden=false;previewText.hidden=true;previewHint.hidden=true;}
+function clearAll(){history=[];renderHistory();resetDisplay();}
 function setMicState(listening,message,isError){isListening=listening;micBtn.classList.toggle('listening',listening);micBtn.setAttribute('aria-pressed',String(listening));micLabel.textContent=listening?'聞き取りを終了':'マイクで話す';micStatus.textContent=message;micStatus.classList.toggle('error',Boolean(isError));}
 function speechErrorMessage(error){const messages={'not-allowed':'マイクが許可されていません。iPhoneの設定からSafariのマイクを許可してください。','service-not-allowed':'音声認識を利用できません。下の入力欄またはキーボードのマイクをお使いください。','audio-capture':'マイクを使用できません。ほかのアプリがマイクを使っていないか確認してください。','no-speech':'声を聞き取れませんでした。もう一度お試しください。','network':'通信状態を確認して、もう一度お試しください。','language-not-supported':'日本語の音声認識を利用できません。キーボードのマイクをお使いください。'};return messages[error]||'音声認識を終了しました。もう一度お試しください。';}
 function createRecognition(){if(!SpeechRecognition)return null;const instance=new SpeechRecognition();instance.lang='ja-JP';instance.continuous=false;instance.interimResults=true;instance.maxAlternatives=1;instance.onstart=function(){setMicState(true,'聞いています。ゆっくりお話しください。');};instance.onresult=function(event){let interim='';for(let index=event.resultIndex;index<event.results.length;index++){const transcript=event.results[index][0].transcript;if(event.results[index].isFinal)finalTranscript+=transcript;else interim+=transcript;}updateDraft(joinText(recognitionBase,(finalTranscript+interim).trim()));micStatus.textContent=interim?'聞き取り中…':'文字に変換しました。内容を確認して送信してください。';};instance.onerror=function(event){if(event.error==='aborted')return;setMicState(false,speechErrorMessage(event.error),true);};instance.onend=function(){const hasResult=Boolean(finalTranscript.trim());if(isListening)setMicState(false,hasResult?'文字に変換しました。内容を確認して送信してください。':'音声入力が終了しました。');};return instance;}
