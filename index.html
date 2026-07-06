@@ -2,107 +2,92 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="HandheldFriendly" content="true">
-<meta name="MobileOptimized" content="width">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="声文字">
 <meta name="theme-color" content="#F8F5EE">
-<title>声文字 — Type B</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
+<title>声文字</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-html{width:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
-html,body{height:100%;background:#F8F5EE;font-family:-apple-system,'Hiragino Sans',sans-serif;-webkit-tap-highlight-color:transparent;color:#0D1B2A;font-size:16px;}
-body{width:100%;min-width:0;}
-#app{max-width:480px;width:100%;margin:0 auto;padding:20px 16px;display:flex;flex-direction:column;gap:18px;min-height:100dvh;}
-
-#hint{background:rgba(107,122,58,0.1);border:1px solid #7A7A45;border-radius:12px;padding:12px 14px;font-size:14px;color:#6B7A3A;line-height:1.4;white-space:nowrap;overflow-x:auto;text-align:center;}
-
-#preview{background:#0D1B2A;border:2px solid #7A7A45;border-radius:16px;padding:32px 24px;min-height:150px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;position:relative;}
-#preview-text{font-size:clamp(26px,8vw,46px);font-weight:700;color:#fff;line-height:1.5;word-break:break-all;}
-#preview-empty{font-size:15px;color:rgba(255,255,255,0.4);}
-#preview-hint{position:absolute;top:10px;right:12px;font-size:10px;color:#8A9A50;letter-spacing:.05em;}
-
-#input-row{display:flex;gap:10px;align-items:flex-end;}
-#voice-input{flex:1;font-size:16px;padding:16px 16px;border-radius:12px;border:2px solid #7A7A45;background:#fff;color:#0D1B2A;resize:none;font-family:inherit;line-height:1.5;outline:none;height:60px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
-#voice-input::placeholder{color:rgba(13,27,42,0.35);}
-#voice-input:focus{border-color:#6B7A3A;}
-#send-btn{flex-shrink:0;width:60px;height:60px;border-radius:12px;border:none;background:linear-gradient(135deg,#D4B84A,#F0D84A);cursor:pointer;display:flex;align-items:center;justify-content:center;}
-
-#phrase-label{font-size:12px;color:#6B7A3A;letter-spacing:.08em;padding:0 2px;}
-#phrase-scroll{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.pbtn{padding:20px 12px;border-radius:14px;border:2px solid #7A7A45;background:#fff;font-size:17px;color:#0D1B2A;cursor:pointer;font-family:inherit;text-align:center;line-height:1.4;font-weight:500;}
-.pbtn:active{background:rgba(107,122,58,0.15);}
-
-#hist-card{background:#fff;border:2px solid #7A7A45;border-radius:14px;overflow:hidden;}
-#hist-head{padding:12px 16px;font-size:11px;color:#6B7A3A;letter-spacing:.08em;border-bottom:1px solid #7A7A45;display:flex;justify-content:space-between;align-items:center;}
-#hist-clear{font-size:10px;color:#6B7A3A;background:none;border:none;cursor:pointer;padding:0;}
-#hist-list{max-height:150px;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px;}
-.hitem{display:flex;gap:8px;align-items:baseline;font-size:14px;cursor:pointer;}
-.htime{color:#8A9A50;font-size:10px;min-width:36px;}
-.hbody{color:#0D1B2A;line-height:1.4;}
-
-#fullscreen{display:none;position:fixed;inset:0;background:#0D1B2A;z-index:9999;flex-direction:column;align-items:center;justify-content:center;padding:32px;cursor:pointer;}
-#fullscreen.show{display:flex;}
-#fs-text{font-size:clamp(36px,11vw,80px);font-weight:700;color:#fff;line-height:1.3;text-align:center;word-break:break-all;}
-#fs-accent{width:48px;height:2px;background:linear-gradient(90deg,#6B7A3A,#8A9A50);margin:20px auto 0;border-radius:1px;}
-#fs-hint{position:absolute;bottom:40px;font-size:11px;color:rgba(107,122,58,0.5);letter-spacing:.05em;}
+:root{--ink:#0D1B2A;--olive:#6B7A3A;--line:#7A7A45;--paper:#F8F5EE;--yellow:#F0D84A;--red:#C94B45}
+*{box-sizing:border-box;margin:0;padding:0}html{width:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{min-height:100%;background:var(--paper);font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Yu Gothic',sans-serif;-webkit-tap-highlight-color:transparent;color:var(--ink);font-size:16px}
+button,textarea{font:inherit}button{touch-action:manipulation}
+#app{max-width:480px;width:100%;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:16px;min-height:100dvh}
+#hint{background:rgba(107,122,58,.1);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:14px;color:var(--olive);line-height:1.45;text-align:center}
+#preview{background:var(--ink);border:2px solid var(--line);border-radius:16px;padding:32px 24px;min-height:150px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;position:relative}
+#preview-text{font-size:clamp(26px,8vw,46px);font-weight:700;color:#fff;line-height:1.5;overflow-wrap:anywhere}
+#preview-empty{font-size:15px;color:rgba(255,255,255,.5);line-height:1.6}#preview-hint{position:absolute;top:10px;right:12px;font-size:10px;color:#A4B56B;letter-spacing:.05em}
+#mic-area{display:flex;flex-direction:column;gap:8px}
+#mic-btn{width:100%;min-height:82px;border:2px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#E6C83E,var(--yellow));color:var(--ink);display:flex;align-items:center;justify-content:center;gap:13px;font-size:21px;font-weight:700;cursor:pointer;box-shadow:0 4px 0 rgba(107,122,58,.28);transition:transform .12s,box-shadow .12s,background .2s}
+#mic-btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(107,122,58,.28)}#mic-btn.listening{background:var(--red);color:#fff;border-color:#8F302C;box-shadow:0 4px 0 rgba(100,20,20,.25);animation:pulse 1.3s ease-in-out infinite}
+#mic-icon{width:30px;height:30px;flex:0 0 auto}#mic-status{min-height:22px;font-size:13px;color:var(--olive);text-align:center;line-height:1.45;padding:0 4px}#mic-status.error{color:#A33832;font-weight:600}
+@keyframes pulse{50%{filter:brightness(1.12)}}@media(prefers-reduced-motion:reduce){#mic-btn{transition:none}#mic-btn.listening{animation:none}}
+#input-label{font-size:12px;color:var(--olive);letter-spacing:.04em;padding:0 2px}#input-row{display:flex;gap:10px;align-items:flex-end}
+#voice-input{flex:1;min-width:0;font-size:16px;padding:16px;border-radius:12px;border:2px solid var(--line);background:#fff;color:var(--ink);resize:none;line-height:1.5;outline:none;height:60px;min-height:60px;max-height:120px;overflow-y:auto}
+#voice-input::placeholder{color:rgba(13,27,42,.45)}#voice-input:focus{border-color:var(--olive);box-shadow:0 0 0 3px rgba(107,122,58,.12)}
+#send-btn{flex:0 0 60px;width:60px;height:60px;border-radius:12px;border:none;background:linear-gradient(135deg,#D4B84A,var(--yellow));cursor:pointer;display:flex;align-items:center;justify-content:center}#send-btn:disabled{opacity:.45;cursor:default}
+#phrase-label{font-size:12px;color:var(--olive);letter-spacing:.08em;padding:0 2px}#phrase-scroll{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pbtn{padding:18px 10px;min-height:64px;border-radius:14px;border:2px solid var(--line);background:#fff;font-size:17px;color:var(--ink);cursor:pointer;text-align:center;line-height:1.4;font-weight:500}.pbtn:active{background:rgba(107,122,58,.15)}
+#hist-card{background:#fff;border:2px solid var(--line);border-radius:14px;overflow:hidden}#hist-head{padding:12px 16px;font-size:11px;color:var(--olive);letter-spacing:.08em;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+#hist-clear{font-size:12px;color:var(--olive);background:none;border:none;cursor:pointer;padding:6px}#hist-list{max-height:160px;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px}
+.hitem{display:flex;gap:8px;align-items:baseline;font-size:14px;cursor:pointer;border:0;background:none;text-align:left;color:inherit;width:100%}.htime{color:#8A9A50;font-size:10px;min-width:36px}.hbody{color:var(--ink);line-height:1.4;overflow-wrap:anywhere}#hist-empty{color:rgba(13,27,42,.4);font-size:13px}
+#fullscreen{display:none;position:fixed;inset:0;background:var(--ink);z-index:9999;flex-direction:column;align-items:center;justify-content:center;padding:32px;cursor:pointer}#fullscreen.show{display:flex}
+#fs-text{font-size:clamp(36px,11vw,80px);font-weight:700;color:#fff;line-height:1.3;text-align:center;overflow-wrap:anywhere}#fs-accent{width:48px;height:2px;background:linear-gradient(90deg,var(--olive),#8A9A50);margin:20px auto 0;border-radius:1px}#fs-hint{position:absolute;bottom:calc(28px + env(safe-area-inset-bottom));font-size:11px;color:rgba(164,181,107,.7);letter-spacing:.05em}
 </style>
 </head>
 <body>
-<div id="app">
-  <div id="hint">💡 タップ→🎤で話す→送信で全画面表示</div>
-  <div id="preview" onclick="openFullscreen()">
-    <span id="preview-empty">フレーズを選ぶか、下の欄に入力してください</span>
-    <span id="preview-text" style="display:none;"></span>
-    <span id="preview-hint" style="display:none;">タップで全画面</span>
+<main id="app">
+  <div id="hint">マイクで話す → 内容を確認 → 送信</div>
+  <div id="preview" role="button" tabindex="0" aria-label="表示中の文章を全画面で開く">
+    <span id="preview-empty">マイクで話すか、下の欄に入力してください</span>
+    <span id="preview-text" hidden></span><span id="preview-hint" hidden>タップで全画面</span>
   </div>
-  <div id="input-row">
-    <textarea id="voice-input" placeholder="ここをタップして入力 / 🎤音声入力" rows="1"></textarea>
-    <button id="send-btn" onclick="submit()" aria-label="送信">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0D1B2A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-      </svg>
+  <section id="mic-area" aria-label="音声入力">
+    <button id="mic-btn" type="button" aria-pressed="false">
+      <svg id="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"></path></svg>
+      <span id="mic-label">マイクで話す</span>
     </button>
+    <p id="mic-status" role="status" aria-live="polite">タップすると音声入力を開始します</p>
+  </section>
+  <div id="input-label">文字入力・キーボードのマイクも使えます</div>
+  <div id="input-row">
+    <textarea id="voice-input" placeholder="ここに入力、またはキーボードの🎤を使用" rows="1" aria-label="表示する文章"></textarea>
+    <button id="send-btn" type="button" aria-label="送信して全画面表示" disabled><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D1B2A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
   </div>
-  <div id="phrase-label">よく使うフレーズ</div>
-  <div id="phrase-scroll"></div>
-  <div id="hist-card">
-    <div id="hist-head"><span>会話履歴</span><button id="hist-clear" onclick="clearAll()">全消去</button></div>
-    <div id="hist-list"><span id="hist-empty" style="color:rgba(13,27,42,0.35);font-size:13px;">まだ履歴がありません</span></div>
-  </div>
-</div>
-<div id="fullscreen" onclick="closeFullscreen()">
-  <div id="fs-text"></div>
-  <div id="fs-accent"></div>
-  <div id="fs-hint">タップして戻る</div>
-</div>
+  <div id="phrase-label">よく使うフレーズ</div><div id="phrase-scroll"></div>
+  <section id="hist-card" aria-label="会話履歴"><div id="hist-head"><span>会話履歴</span><button id="hist-clear" type="button">全消去</button></div><div id="hist-list"><span id="hist-empty">まだ履歴がありません</span></div></section>
+</main>
+<div id="fullscreen" role="dialog" aria-modal="true" aria-label="文章の全画面表示"><div id="fs-text"></div><div id="fs-accent"></div><div id="fs-hint">タップして戻る</div></div>
 <script>
-const PHRASES=["こんにちは","お疲れ様です","休憩しましょう","調子はどうですか？"];
-let currentText="",history=[];
-const previewEmpty=document.getElementById('preview-empty'),previewText=document.getElementById('preview-text'),previewHint=document.getElementById('preview-hint'),voiceInput=document.getElementById('voice-input'),histList=document.getElementById('hist-list'),histEmpty=document.getElementById('hist-empty'),fsText=document.getElementById('fs-text'),fullscreen=document.getElementById('fullscreen');
+const PHRASES=['こんにちは','お疲れ様です','休憩しましょう','調子はどうですか？'];
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+let currentText='',history=[],recognition=null,isListening=false,recognitionBase='',finalTranscript='';
+const preview=document.getElementById('preview'),previewEmpty=document.getElementById('preview-empty'),previewText=document.getElementById('preview-text'),previewHint=document.getElementById('preview-hint'),voiceInput=document.getElementById('voice-input'),sendBtn=document.getElementById('send-btn'),micBtn=document.getElementById('mic-btn'),micLabel=document.getElementById('mic-label'),micStatus=document.getElementById('mic-status'),histList=document.getElementById('hist-list'),histEmpty=document.getElementById('hist-empty'),fsText=document.getElementById('fs-text'),fullscreen=document.getElementById('fullscreen');
 function timeNow(){return new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});}
-function setDisplay(text){currentText=text;previewEmpty.style.display='none';previewText.style.display='';previewHint.style.display='';previewText.textContent=text;}
-function addHistory(text,src){if(!text.trim())return;history.unshift({text:text.trim(),src,time:timeNow()});renderHistory();}
-function renderHistory(){document.querySelectorAll('.hitem').forEach(e=>e.remove());histEmpty.style.display=history.length?'none':'';history.forEach(h=>{const d=document.createElement('div');d.className='hitem';d.innerHTML=`<span class="htime">${h.time}</span><span class="hbody">${h.src==='phrase'?'◆':'◇'} ${h.text}</span>`;d.onclick=()=>{setDisplay(h.text);openFullscreen();};histList.appendChild(d);});}
-function submit(){const t=voiceInput.value.trim();if(!t)return;setDisplay(t);addHistory(t,'input');voiceInput.value='';voiceInput.style.height='52px';openFullscreen();}
+function joinText(base,addition){return [base,addition].filter(Boolean).join(base&&addition?' ':'');}
+function resizeInput(){voiceInput.style.height='60px';voiceInput.style.height=Math.min(voiceInput.scrollHeight,120)+'px';}
+function updateSendState(){sendBtn.disabled=!voiceInput.value.trim();}
+function setDisplay(text){currentText=text;previewEmpty.hidden=true;previewText.hidden=false;previewHint.hidden=false;previewText.textContent=text;}
+function updateDraft(text){voiceInput.value=text;resizeInput();updateSendState();if(text.trim())setDisplay(text.trim());}
+function addHistory(text,src){const clean=text.trim();if(!clean)return;history.unshift({text:clean,src:src,time:timeNow()});renderHistory();}
+function renderHistory(){histList.querySelectorAll('.hitem').forEach(function(element){element.remove();});histEmpty.hidden=history.length>0;history.forEach(function(item){const button=document.createElement('button'),time=document.createElement('span'),body=document.createElement('span');button.type='button';button.className='hitem';time.className='htime';body.className='hbody';time.textContent=item.time;body.textContent=(item.src==='phrase'?'◆':'◇')+' '+item.text;button.append(time,body);button.addEventListener('click',function(){setDisplay(item.text);openFullscreen();});histList.appendChild(button);});}
+function submitText(){const text=voiceInput.value.trim();if(!text)return;if(isListening)stopListening();setDisplay(text);addHistory(text,'input');voiceInput.value='';resizeInput();updateSendState();openFullscreen();}
 function openFullscreen(){if(!currentText)return;fsText.textContent=currentText;fullscreen.classList.add('show');}
 function closeFullscreen(){fullscreen.classList.remove('show');}
-function clearAll(){history=[];currentText='';renderHistory();previewEmpty.style.display='';previewText.style.display='none';previewHint.style.display='none';}
-voiceInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submit();}});
-voiceInput.addEventListener('input',()=>{voiceInput.style.height='52px';voiceInput.style.height=Math.min(voiceInput.scrollHeight,120)+'px';});
-PHRASES.forEach(p=>{const btn=document.createElement('button');btn.className='pbtn';btn.textContent=p;btn.onclick=()=>{setDisplay(p);addHistory(p,'phrase');openFullscreen();};document.getElementById('phrase-scroll').appendChild(btn);});
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
-// デスクトップ表示モードでもモバイル幅を強制
-(function(){
-  var meta = document.querySelector('meta[name="viewport"]');
-  function forceViewport(){
-    if(meta) meta.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
-  }
-  forceViewport();
-  window.addEventListener('resize', forceViewport);
-})();
+function clearAll(){history=[];currentText='';renderHistory();previewEmpty.hidden=false;previewText.hidden=true;previewHint.hidden=true;}
+function setMicState(listening,message,isError){isListening=listening;micBtn.classList.toggle('listening',listening);micBtn.setAttribute('aria-pressed',String(listening));micLabel.textContent=listening?'聞き取りを終了':'マイクで話す';micStatus.textContent=message;micStatus.classList.toggle('error',Boolean(isError));}
+function speechErrorMessage(error){const messages={'not-allowed':'マイクが許可されていません。iPhoneの設定からSafariのマイクを許可してください。','service-not-allowed':'音声認識を利用できません。下の入力欄またはキーボードのマイクをお使いください。','audio-capture':'マイクを使用できません。ほかのアプリがマイクを使っていないか確認してください。','no-speech':'声を聞き取れませんでした。もう一度お試しください。','network':'通信状態を確認して、もう一度お試しください。','language-not-supported':'日本語の音声認識を利用できません。キーボードのマイクをお使いください。'};return messages[error]||'音声認識を終了しました。もう一度お試しください。';}
+function createRecognition(){if(!SpeechRecognition)return null;const instance=new SpeechRecognition();instance.lang='ja-JP';instance.continuous=false;instance.interimResults=true;instance.maxAlternatives=1;instance.onstart=function(){setMicState(true,'聞いています。ゆっくりお話しください。');};instance.onresult=function(event){let interim='';for(let index=event.resultIndex;index<event.results.length;index++){const transcript=event.results[index][0].transcript;if(event.results[index].isFinal)finalTranscript+=transcript;else interim+=transcript;}updateDraft(joinText(recognitionBase,(finalTranscript+interim).trim()));micStatus.textContent=interim?'聞き取り中…':'文字に変換しました。内容を確認して送信してください。';};instance.onerror=function(event){if(event.error==='aborted')return;setMicState(false,speechErrorMessage(event.error),true);};instance.onend=function(){const hasResult=Boolean(finalTranscript.trim());if(isListening)setMicState(false,hasResult?'文字に変換しました。内容を確認して送信してください。':'音声入力が終了しました。');};return instance;}
+function startListening(){if(!SpeechRecognition){voiceInput.focus();setMicState(false,'このiPhoneでは専用マイクを利用できません。キーボードのマイクをお使いください。',true);return;}recognitionBase=voiceInput.value.trim();finalTranscript='';recognition=createRecognition();setMicState(true,'マイクを準備しています…');try{recognition.start();}catch(error){setMicState(false,'少し待ってから、もう一度マイクをタップしてください。',true);}}
+function stopListening(){if(recognition&&isListening){micStatus.textContent='文字に変換しています…';recognition.stop();}}
+function toggleListening(){isListening?stopListening():startListening();}
+micBtn.addEventListener('click',toggleListening);sendBtn.addEventListener('click',submitText);preview.addEventListener('click',openFullscreen);preview.addEventListener('keydown',function(event){if(event.key==='Enter'||event.key===' '){event.preventDefault();openFullscreen();}});fullscreen.addEventListener('click',closeFullscreen);document.getElementById('hist-clear').addEventListener('click',clearAll);voiceInput.addEventListener('keydown',function(event){if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitText();}});voiceInput.addEventListener('input',function(){resizeInput();updateSendState();if(voiceInput.value.trim())setDisplay(voiceInput.value.trim());});document.addEventListener('visibilitychange',function(){if(document.hidden&&isListening&&recognition)recognition.abort();});
+PHRASES.forEach(function(phrase){const button=document.createElement('button');button.type='button';button.className='pbtn';button.textContent=phrase;button.addEventListener('click',function(){setDisplay(phrase);addHistory(phrase,'phrase');openFullscreen();});document.getElementById('phrase-scroll').appendChild(button);});
+if(!SpeechRecognition)micStatus.textContent='専用マイクが使えない場合も、下の入力欄とキーボードのマイクを利用できます。';
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
 </script>
 </body>
 </html>
