@@ -21,8 +21,10 @@ button,textarea{font:inherit}button{touch-action:manipulation}
 #preview-text{font-size:clamp(26px,8vw,46px);font-weight:700;color:#fff;line-height:1.5;overflow-wrap:anywhere}
 #preview-empty{font-size:15px;color:rgba(255,255,255,.5);line-height:1.6}#preview-hint{position:absolute;top:10px;right:12px;font-size:10px;color:#A4B56B;letter-spacing:.05em}
 #mic-area{display:flex;flex-direction:column;gap:8px}
-#mic-btn{width:100%;min-height:82px;border:2px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#E6C83E,var(--yellow));color:var(--ink);display:flex;align-items:center;justify-content:center;gap:13px;font-size:21px;font-weight:700;cursor:pointer;box-shadow:0 4px 0 rgba(107,122,58,.28);transition:transform .12s,box-shadow .12s,background .2s}
+#mic-row{display:flex;gap:10px;align-items:stretch}
+#mic-btn{flex:1;min-width:0;min-height:82px;border:2px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#E6C83E,var(--yellow));color:var(--ink);display:flex;align-items:center;justify-content:center;gap:13px;font-size:21px;font-weight:700;cursor:pointer;box-shadow:0 4px 0 rgba(107,122,58,.28);transition:transform .12s,box-shadow .12s,background .2s}
 #mic-btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(107,122,58,.28)}#mic-btn.listening{background:var(--red);color:#fff;border-color:#8F302C;box-shadow:0 4px 0 rgba(100,20,20,.25);animation:pulse 1.3s ease-in-out infinite}
+#confirm-btn{flex:0 0 96px;min-height:82px;border:2px solid var(--line);border-radius:18px;background:var(--olive);color:#fff;font-size:18px;font-weight:700;cursor:pointer;box-shadow:0 4px 0 rgba(13,27,42,.2)}#confirm-btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(13,27,42,.2)}#confirm-btn:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none}
 #mic-icon{width:30px;height:30px;flex:0 0 auto}#mic-status{min-height:22px;font-size:13px;color:var(--olive);text-align:center;line-height:1.45;padding:0 4px}#mic-status.error{color:#A33832;font-weight:600}
 @keyframes pulse{50%{filter:brightness(1.12)}}@media(prefers-reduced-motion:reduce){#mic-btn{transition:none}#mic-btn.listening{animation:none}}
 #input-label{font-size:12px;color:var(--olive);letter-spacing:.04em;padding:0 2px}#input-row{display:flex;gap:10px;align-items:flex-end}
@@ -44,10 +46,13 @@ button,textarea{font:inherit}button{touch-action:manipulation}
     <span id="preview-text" hidden></span><span id="preview-hint" hidden>タップで全画面</span>
   </div>
   <section id="mic-area" aria-label="音声入力">
-    <button id="mic-btn" type="button" aria-pressed="false">
-      <svg id="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"></path></svg>
-      <span id="mic-label">マイクで話す</span>
-    </button>
+    <div id="mic-row">
+      <button id="mic-btn" type="button" aria-pressed="false">
+        <svg id="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"></path></svg>
+        <span id="mic-label">マイクで話す</span>
+      </button>
+      <button id="confirm-btn" type="button" aria-label="確定して会話履歴に追加" disabled>確定</button>
+    </div>
     <p id="mic-status" role="status" aria-live="polite">タップすると音声入力を開始します</p>
   </section>
   <div id="input-label">文字入力・キーボードのマイクも使えます</div>
@@ -61,15 +66,16 @@ button,textarea{font:inherit}button{touch-action:manipulation}
 <script>
 const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
 let currentText='',history=[],recognition=null,isListening=false,recognitionBase='',finalTranscript='';
-const preview=document.getElementById('preview'),previewEmpty=document.getElementById('preview-empty'),previewText=document.getElementById('preview-text'),previewHint=document.getElementById('preview-hint'),voiceInput=document.getElementById('voice-input'),sendBtn=document.getElementById('send-btn'),micBtn=document.getElementById('mic-btn'),micLabel=document.getElementById('mic-label'),micStatus=document.getElementById('mic-status'),histList=document.getElementById('hist-list'),histEmpty=document.getElementById('hist-empty'),fsText=document.getElementById('fs-text'),fullscreen=document.getElementById('fullscreen');
+const preview=document.getElementById('preview'),previewEmpty=document.getElementById('preview-empty'),previewText=document.getElementById('preview-text'),previewHint=document.getElementById('preview-hint'),voiceInput=document.getElementById('voice-input'),sendBtn=document.getElementById('send-btn'),confirmBtn=document.getElementById('confirm-btn'),micBtn=document.getElementById('mic-btn'),micLabel=document.getElementById('mic-label'),micStatus=document.getElementById('mic-status'),histList=document.getElementById('hist-list'),histEmpty=document.getElementById('hist-empty'),fsText=document.getElementById('fs-text'),fullscreen=document.getElementById('fullscreen');
 function timeNow(){return new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});}
 function joinText(base,addition){return [base,addition].filter(Boolean).join(base&&addition?' ':'');}
 function resizeInput(){voiceInput.style.height='60px';voiceInput.style.height=Math.min(voiceInput.scrollHeight,120)+'px';}
-function updateSendState(){sendBtn.disabled=!voiceInput.value.trim();}
+function updateSendState(){const empty=!voiceInput.value.trim();sendBtn.disabled=empty;confirmBtn.disabled=empty;}
 function setDisplay(text){currentText=text;previewEmpty.hidden=true;previewText.hidden=false;previewHint.hidden=false;previewText.textContent=text;}
 function updateDraft(text){voiceInput.value=text;resizeInput();updateSendState();if(text.trim())setDisplay(text.trim());}
 function addHistory(text,src){const clean=text.trim();if(!clean)return;history.unshift({text:clean,src:src,time:timeNow()});renderHistory();}
 function renderHistory(){histList.querySelectorAll('.hitem').forEach(function(element){element.remove();});histEmpty.hidden=history.length>0;history.forEach(function(item){const button=document.createElement('button'),time=document.createElement('span'),body=document.createElement('span');button.type='button';button.className='hitem';time.className='htime';body.className='hbody';time.textContent=item.time;body.textContent=(item.src==='phrase'?'◆':'◇')+' '+item.text;button.append(time,body);button.addEventListener('click',function(){setDisplay(item.text);openFullscreen();});histList.appendChild(button);});}
+function confirmText(){const text=voiceInput.value.trim();if(!text)return;if(isListening&&recognition)recognition.abort();setMicState(false,'会話履歴に追加しました。');setDisplay(text);addHistory(text,'input');voiceInput.value='';resizeInput();updateSendState();}
 function submitText(){const text=voiceInput.value.trim();if(!text)return;if(isListening)stopListening();setDisplay(text);addHistory(text,'input');voiceInput.value='';resizeInput();updateSendState();openFullscreen();}
 function openFullscreen(){if(!currentText)return;fsText.textContent=currentText;fullscreen.classList.add('show');}
 function closeFullscreen(){fullscreen.classList.remove('show');}
@@ -80,7 +86,7 @@ function createRecognition(){if(!SpeechRecognition)return null;const instance=ne
 function startListening(){if(!SpeechRecognition){voiceInput.focus();setMicState(false,'このiPhoneでは専用マイクを利用できません。キーボードのマイクをお使いください。',true);return;}recognitionBase=voiceInput.value.trim();finalTranscript='';recognition=createRecognition();setMicState(true,'マイクを準備しています…');try{recognition.start();}catch(error){setMicState(false,'少し待ってから、もう一度マイクをタップしてください。',true);}}
 function stopListening(){if(recognition&&isListening){micStatus.textContent='文字に変換しています…';recognition.stop();}}
 function toggleListening(){isListening?stopListening():startListening();}
-micBtn.addEventListener('click',toggleListening);sendBtn.addEventListener('click',submitText);preview.addEventListener('click',openFullscreen);preview.addEventListener('keydown',function(event){if(event.key==='Enter'||event.key===' '){event.preventDefault();openFullscreen();}});fullscreen.addEventListener('click',closeFullscreen);document.getElementById('hist-clear').addEventListener('click',clearAll);voiceInput.addEventListener('keydown',function(event){if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitText();}});voiceInput.addEventListener('input',function(){resizeInput();updateSendState();if(voiceInput.value.trim())setDisplay(voiceInput.value.trim());});document.addEventListener('visibilitychange',function(){if(document.hidden&&isListening&&recognition)recognition.abort();});
+micBtn.addEventListener('click',toggleListening);confirmBtn.addEventListener('click',confirmText);sendBtn.addEventListener('click',submitText);preview.addEventListener('click',openFullscreen);preview.addEventListener('keydown',function(event){if(event.key==='Enter'||event.key===' '){event.preventDefault();openFullscreen();}});fullscreen.addEventListener('click',closeFullscreen);document.getElementById('hist-clear').addEventListener('click',clearAll);voiceInput.addEventListener('keydown',function(event){if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitText();}});voiceInput.addEventListener('input',function(){resizeInput();updateSendState();if(voiceInput.value.trim())setDisplay(voiceInput.value.trim());});document.addEventListener('visibilitychange',function(){if(document.hidden&&isListening&&recognition)recognition.abort();});
 if(!SpeechRecognition)micStatus.textContent='専用マイクが使えない場合も、下の入力欄とキーボードのマイクを利用できます。';
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
 </script>
