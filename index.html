@@ -19,12 +19,12 @@ button,textarea{font:inherit}button{touch-action:manipulation}
 #app{max-width:480px;width:100%;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) 16px 0;display:flex;flex-direction:column;gap:13px;min-height:100dvh;position:relative}
 #app::before{content:"Voice Rehab";align-self:flex-start;background:var(--navy);color:#fff;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;border-radius:3px;box-shadow:0 8px 18px rgba(45,56,70,.14)}
 #hint{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--teal);border-radius:5px;padding:12px 14px;font-size:13px;font-weight:700;color:#394553;line-height:1.45;text-align:left;box-shadow:var(--shadow)}
-#preview{background:linear-gradient(180deg,#18B8CC 0%,#17C2B3 100%);border:0;border-radius:5px;padding:34px 26px;min-height:230px;flex:1 1 270px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+#preview{background:var(--teal);border:0;border-radius:5px;padding:34px 26px;min-height:230px;flex:1 1 270px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;position:relative;overflow:hidden;box-shadow:var(--shadow)}
 #preview::before{content:"";position:absolute;inset:18px;border:1px solid rgba(255,255,255,.24);border-radius:3px;pointer-events:none}
 #preview::after{content:"";position:absolute;width:160px;height:160px;right:-58px;bottom:-58px;border-radius:50%;background:rgba(255,255,255,.12);pointer-events:none}
 #preview-text{font-size:clamp(28px,8vw,48px);font-weight:800;color:#fff;line-height:1.45;letter-spacing:.02em;overflow-wrap:anywhere;position:relative;z-index:1}
 #preview-empty{font-size:15px;color:rgba(255,255,255,.82);line-height:1.7;position:relative;z-index:1}#preview-hint{position:absolute;top:14px;right:16px;font-size:10px;color:rgba(255,255,255,.86);letter-spacing:.12em;font-weight:800}
-#hist-card{background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden;flex:0 0 auto;box-shadow:var(--shadow)}#hist-head{padding:12px 16px;font-size:11px;color:#fff;background:var(--navy);font-weight:800;letter-spacing:.12em;border-bottom:0;display:flex;justify-content:space-between;align-items:center}
+#hist-card{background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden;flex:0 0 auto;box-shadow:var(--shadow)}#hist-head{padding:12px 16px;font-size:11px;color:#fff;background:var(--teal);font-weight:800;letter-spacing:.12em;border-bottom:0;display:flex;justify-content:space-between;align-items:center}
 #hist-clear{font-size:12px;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:3px;cursor:pointer;padding:6px 10px}#hist-list{max-height:130px;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px}
 .hitem{display:flex;gap:8px;align-items:baseline;font-size:14px;cursor:pointer;border:0;background:#F8FBFC;border-left:4px solid var(--teal);border-radius:3px;text-align:left;color:inherit;width:100%;padding:10px}.htime{color:var(--teal-dark);font-size:10px;min-width:36px;font-weight:800}.hbody{color:var(--ink);line-height:1.4;overflow-wrap:anywhere}#hist-empty{color:var(--muted);font-size:13px}
 #bottom-controls{margin-top:auto;position:sticky;bottom:0;z-index:20;background:linear-gradient(180deg,rgba(238,243,246,0),rgba(238,243,246,.94) 20%,rgba(238,243,246,.99));padding:12px 0 calc(14px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px}
@@ -33,11 +33,11 @@ button,textarea{font:inherit}button{touch-action:manipulation}
 #voice-input::placeholder{color:#A6B1BA}#voice-input:focus{border-color:var(--teal);box-shadow:0 0 0 4px rgba(22,185,201,.14),0 8px 18px rgba(45,56,70,.08)}
 #send-btn{flex:0 0 60px;width:60px;height:60px;border-radius:5px;border:0;background:var(--orange);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 20px rgba(255,138,61,.22)}#send-btn:disabled{opacity:.42;cursor:default;box-shadow:none}
 #mic-area{display:flex;flex-direction:column;gap:8px}
-#mic-btn{width:100%;min-height:84px;border:0;border-radius:5px;background:linear-gradient(180deg,#16B9C9 0%,#16BFAE 100%);color:#fff;display:flex;align-items:center;justify-content:center;gap:13px;font-size:21px;font-weight:900;letter-spacing:.03em;cursor:pointer;box-shadow:0 14px 26px rgba(22,185,201,.25);transition:transform .12s,box-shadow .12s,background .2s}
-#mic-btn:active{transform:translateY(3px);box-shadow:0 8px 16px rgba(22,185,201,.2)}#mic-btn.listening{background:linear-gradient(180deg,#FF8A3D,#F26147);color:#fff;box-shadow:0 14px 26px rgba(242,97,71,.25);animation:pulse 1.3s ease-in-out infinite}
+#mic-btn{width:100%;min-height:84px;border:0;border-radius:5px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;gap:13px;font-size:21px;font-weight:900;letter-spacing:.03em;cursor:pointer;box-shadow:0 14px 26px rgba(22,185,201,.25);transition:transform .12s,box-shadow .12s,background .2s}
+#mic-btn:active{transform:translateY(3px);box-shadow:0 8px 16px rgba(22,185,201,.2)}#mic-btn.listening{background:var(--orange);color:#fff;box-shadow:0 14px 26px rgba(255,138,61,.25);animation:pulse 1.3s ease-in-out infinite}
 #mic-icon{width:30px;height:30px;flex:0 0 auto}#mic-status{min-height:22px;font-size:13px;color:#61707E;text-align:center;line-height:1.45;padding:0 4px;font-weight:600}#mic-status.error{color:#D94F45;font-weight:700}
 @keyframes pulse{50%{filter:brightness(1.12)}}@media(prefers-reduced-motion:reduce){#mic-btn{transition:none}#mic-btn.listening{animation:none}}
-#fullscreen{display:none;position:fixed;inset:0;background:linear-gradient(180deg,#16B9C9,#16BFAE);z-index:9999;flex-direction:column;align-items:center;justify-content:center;padding:32px;cursor:pointer}#fullscreen.show{display:flex}
+#fullscreen{display:none;position:fixed;inset:0;background:var(--navy);z-index:9999;flex-direction:column;align-items:center;justify-content:center;padding:32px;cursor:pointer}#fullscreen.show{display:flex}
 #fs-text{font-size:clamp(38px,11vw,84px);font-weight:900;color:#fff;line-height:1.28;text-align:center;letter-spacing:.02em;overflow-wrap:anywhere}#fs-accent{width:62px;height:4px;background:#fff;margin:24px auto 0;border-radius:2px;opacity:.8}#fs-hint{position:absolute;bottom:calc(28px + env(safe-area-inset-bottom));font-size:11px;color:rgba(255,255,255,.78);font-weight:800;letter-spacing:.12em}
 </style>
 </head>
@@ -93,6 +93,6 @@ micBtn.addEventListener('click',toggleListening);sendBtn.addEventListener('click
 if(!SpeechRecognition)micStatus.textContent='専用マイクが使えない場合も、下の入力欄とキーボードのマイクを利用できます。';
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
 </script>
-<!-- release: flat-teal-ui-kit-design -->
+<!-- release: flat-teal-solid-navy-fullscreen -->
 </body>
 </html>
