@@ -23,9 +23,9 @@ button,textarea{font:inherit}button{touch-action:manipulation}
 #preview::after{content:"";position:absolute;width:160px;height:160px;right:-58px;bottom:-58px;border-radius:50%;background:rgba(255,255,255,.12);pointer-events:none}
 #preview-text{font-size:clamp(28px,8vw,48px);font-weight:800;color:#fff;line-height:1.45;letter-spacing:.02em;overflow-wrap:anywhere;position:relative;z-index:1}
 #preview-empty{font-size:15px;color:rgba(255,255,255,.82);line-height:1.7;position:relative;z-index:1}#preview-hint{position:absolute;top:14px;right:16px;font-size:10px;color:rgba(255,255,255,.86);letter-spacing:.12em;font-weight:800}
-#hist-card{background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden;flex:0 0 auto;box-shadow:0 8px 18px rgba(45,56,70,.08)}#hist-head{padding:12px 16px;font-size:11px;color:#5E6A75;background:#E8EEF2;font-weight:800;letter-spacing:.12em;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-#hist-clear{font-size:12px;color:#5E6A75;background:#F6F9FA;border:1px solid #DCE5EA;border-radius:3px;cursor:pointer;padding:6px 10px}#hist-list{max-height:130px;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px}
-.hitem{display:flex;gap:8px;align-items:baseline;font-size:14px;cursor:pointer;border:0;background:#F8FBFC;border-left:4px solid #DCE5EA;border-radius:3px;text-align:left;color:inherit;width:100%;padding:10px}.htime{color:#7E8B96;font-size:10px;min-width:36px;font-weight:800}.hbody{color:var(--ink);line-height:1.4;overflow-wrap:anywhere}#hist-empty{color:var(--muted);font-size:13px}
+#hist-card{background:#E1E8ED;border:1px solid #CDD8DF;border-radius:5px;overflow:hidden;flex:0 0 auto;box-shadow:0 8px 18px rgba(45,56,70,.08)}#hist-head{padding:12px 16px;font-size:11px;color:#4B5863;background:#D4DEE5;font-weight:800;letter-spacing:.12em;border-bottom:1px solid #C5D1D9;display:flex;justify-content:space-between;align-items:center}
+#hist-clear{font-size:12px;color:#4B5863;background:#EAF0F4;border:1px solid #C5D1D9;border-radius:3px;cursor:pointer;padding:6px 10px}#hist-list{max-height:130px;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px}
+.hitem{display:flex;gap:8px;align-items:baseline;font-size:14px;cursor:pointer;border:0;background:#EEF3F6;border-left:4px solid #B8C6CF;border-radius:3px;text-align:left;color:inherit;width:100%;padding:10px}.htime{color:#6A7883;font-size:10px;min-width:36px;font-weight:800}.hbody{color:var(--ink);line-height:1.4;overflow-wrap:anywhere}#hist-empty{color:#6A7883;font-size:13px}
 #bottom-controls{margin-top:auto;position:sticky;bottom:0;z-index:20;background:linear-gradient(180deg,rgba(238,243,246,0),rgba(238,243,246,.94) 20%,rgba(238,243,246,.99));padding:12px 0 calc(14px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px}
 #input-label{font-size:12px;color:#61707E;font-weight:700;letter-spacing:.05em;padding:0 2px}#input-row{display:flex;gap:10px;align-items:flex-end}
 #voice-input{flex:1;min-width:0;font-size:16px;padding:16px;border-radius:5px;border:1px solid var(--line);background:#fff;color:var(--ink);resize:none;line-height:1.5;outline:none;height:60px;min-height:60px;max-height:120px;overflow-y:auto;box-shadow:0 8px 18px rgba(45,56,70,.08)}
@@ -91,6 +91,6 @@ micBtn.addEventListener('click',toggleListening);sendBtn.addEventListener('click
 if(!SpeechRecognition)micStatus.textContent='専用マイクが使えない場合も、下の入力欄とキーボードのマイクを利用できます。';
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
 </script>
-<!-- release: navy-preview-muted-history -->
+<!-- release: darker-muted-history -->
 </body>
 </html>
